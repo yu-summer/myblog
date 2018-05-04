@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.summer.blog.dao.UserDao">
+  <select id="getUserByUsername" parameterType="String" resultType="User">
+      SELECT * FROM user_info WHERE username = #{username};
+  </select>
+
+  <select id="getUserByEmail" parameterType="String" resultType="User">
+    SELECT * FROM user_info WHERE email = #{email}
+  </select>
+
+  <select id="getRoles" parameterType="String" resultType="String">
+    SELECT role_info.role_name FROM role_info INNER JOIN user_role ON user_role.role_id=role_info.role_id INNER JOIN user_info ON user_info.username=#{username} AND user_info.id=user_role.user_id;
+  </select>
+
+  <select id="getPermissions" parameterType="String" resultType="String">
+    SELECT permission_info.permission_name FROM permission_info, user_info, user_role, role_permission WHERE permission_info.permission_id=role_permission.permission_id
+                                                                                                         AND user_role.role_id=role_permission.role_id AND user_role.user_id=user_info.id
+                                                                                                         AND user_info.username=#{username};
+  </select>
+
+  <insert id="createUser" parameterType="String">
+    INSERT INTO user_info(username, password, email) VALUES (#{username}, #{password}, #{email})
+  </insert>
+
+  <update id="updateUser" parameterType="String">
+    UPDATE user_info SET email = #{email}, password = #{password} WHERE username = #{username}
+  </update>
+</mapper>

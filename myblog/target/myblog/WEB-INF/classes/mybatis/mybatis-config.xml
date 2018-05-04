@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="logImpl" value="SLF4J"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias type="com.summer.blog.entities.Article" alias="Article"/>
+        <typeAlias type="com.summer.blog.entities.User" alias="User"/>
+        <typeAlias type="com.summer.blog.entities.UserInfo" alias="UserInfo"/>
+        <typeAlias type="com.summer.blog.entities.Label" alias="Label"/>
+        <typeAlias type="com.summer.blog.entities.Recommend" alias="Recommend"/>
+    </typeAliases>
+</configuration>

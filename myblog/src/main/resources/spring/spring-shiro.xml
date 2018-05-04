@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+  <!-- Shiro过滤器 -->
+  <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+    <!-- Shiro的核心安全接口,这个属性是必须的 -->
+    <property name="securityManager" ref="securityManager"/>
+    <!-- 身份认证失败，则跳转到登录页面的配置 -->
+    <property name="loginUrl" value="login.do"/>
+    <!-- 权限认证失败，则跳转到指定页面 -->
+    <property name="unauthorizedUrl" value="unauthorized.do"/>
+    <!-- Shiro连接约束配置,即过滤链的定义 -->
+    <property name="filterChainDefinitions">
+      <value>
+        <!--user-->
+        /logout.do = logout <!--与操作指令key(logout)对应-->
+        /user/login.do = anon  <!--登录不拦截-->
+        /user/doLogin.do = anon
+        /user/register.do = anon  <!--登录不拦截-->
+        /user/doRegister.do = anon
+        /user/** = authc
+        <!--/user/toCheckUser.do = authc&lt;!&ndash;表示需认证才能使用&ndash;&gt;-->
+        <!--/user/toUpdateUser.do = authc-->
+        <!--/shiro/user/teacher*/**=perms["user:create"] &lt;!&ndash;访问需要user:create权限&ndash;&gt;-->
+
+        <!--article-->
+        /article/showArticle.do = anon
+        /article/toAddArticle.do = perms["article:create"]
+        /article/toWriteArticle.do = perms["article:create"]
+      </value>
+    </property>
+    <property name="filters">
+      <map>
+        <entry key="logout" value-ref="logoutFilter"/> <!--操作指令(logout)与过滤器(LogoutFilter拦截器id)对应-->
+      </map>
+    </property>
+  </bean>
+
+  <!-- 自定义Realm -->
+  <bean id="myRealm" class="com.summer.blog.realms.MyRealm">
+    <property name="authorizationCachingEnabled" value="false"/>
+  </bean>
+
+  <!-- 安全管理器 -->
+  <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+    <property name="realm" ref="myRealm"/>
+  </bean>
+
+  <!--自定义退出路径-->
+  <bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
+    <property name="redirectUrl" value="user/login.do"/>
+  </bean>
+
+  <!-- 保证实现了Shiro内部lifecycle函数的bean执行 post processor -->
+  <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+</beans>

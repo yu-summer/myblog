@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.summer.blog.dao.LabelDao">
+  <select id="getAllLabel" resultType="Label">
+    SELECT label_id id, label_name labelName, use_count counts FROM label;
+  </select>
+
+  <select id="getAllRecommends" resultType="Recommend">
+    select * from recommend_link;
+  </select>
+
+  <!--<insert id="addLabels">-->
+    <!--insert into article_label(article_id, label_id) values-->
+    <!--<foreach collection="labels" separator="," item="label">-->
+      <!--(#{articleID}, #{label})-->
+    <!--</foreach>-->
+  <!--</insert>-->
+</mapper>
